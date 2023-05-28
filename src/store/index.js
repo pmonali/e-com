@@ -3,25 +3,30 @@ import { createStore } from "vuex";
 const store = createStore({
   state() {
     return {
-      currentUser: null,
-      users: [],
+      currentUser: JSON.parse(localStorage.getItem("currentUser")) || null,
+      users: JSON.parse(localStorage.getItem("users")) || [],
     };
   },
+
   mutations: {
-    setCurrentUser(state, user) {
-      state.currentUser = user;
+    setCurrentUser(state, username) {
+      state.currentUser = username;
+      localStorage.setItem("currentUser", JSON.stringify(username));
     },
-    addUser(state, user) {
-      state.users.push(user);
+    // ...
+    logout(state) {
+      state.currentUser = null;
+      localStorage.removeItem("currentUser");
     },
   },
+
   actions: {
     signup({ commit, state }, user) {
       const existingUser = state.users.find(
         (u) => u.username === user.username
       );
       if (existingUser) {
-        throw new Error("Username already exists.");
+        alert("Username already exists.");
       }
 
       commit("addUser", user);
@@ -34,13 +39,16 @@ const store = createStore({
           u.password === credentials.password
       );
       if (!user) {
-        throw new Error("Invalid username or password.");
+        commit("setCurrentUser", null); // Set currentUser to null
+        alert("Invalid username or password.");
       }
 
-      commit("setCurrentUser", user);
+      commit("setCurrentUser", user.username);
     },
+
     logout({ commit }) {
       commit("setCurrentUser", null);
+      localStorage.removeItem("currentUser");
     },
   },
   getters: {

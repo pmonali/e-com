@@ -36,9 +36,6 @@
                 </div>
                 <div class="dropdown-menu">
                   <div class="dropdown-content">
-                    <router-link to="/orders" class="dropdown-item"
-                      >Orders</router-link
-                    >
                     <router-link to="/account" class="dropdown-item"
                       >Account Details</router-link
                     >

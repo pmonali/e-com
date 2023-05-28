@@ -3,9 +3,10 @@
     class="category-card"
     :style="{ backgroundImage: 'url(' + category.image + ')' }"
   >
-    <router-link :to="'/categories/' + category.id" class="category-link">
-      <h3 class="category-title">{{ category.name }}</h3>
-    </router-link>
+    <!-- <router-link :to="'/categories/' + category.id" class="category-link"> -->
+    <!-- <router-link :to="`/category/${category.id}`"> -->
+    <h3 class="category-title">{{ category.name }}</h3>
+    <!-- . </router-link> -->
   </div>
 </template>
 

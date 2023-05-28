@@ -3,7 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import CategoriesView from "../views/CategoriesView.vue";
 import LoginForm from "../components/LoginForm.vue";
 import SignUp from "../components/SignUp.vue";
-
+import ProductView from "../views/ProductView.vue";
 const routes = [
   {
     path: "/",
@@ -24,6 +24,13 @@ const routes = [
     path: "/signup",
     name: "signup",
     component: SignUp,
+  },
+  // { path: "/category/:id", component: ProductView, props: true },
+  {
+    path: "/category/:category",
+    name: "ProductView",
+    component: ProductView,
+    props: true,
   },
 ];
 

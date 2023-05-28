@@ -38,12 +38,15 @@ export default {
       this.$store
         .dispatch("login", credentials)
         .then(() => {
+          // Handle successful login
+          // Redirect the user to the desired route
           this.$router.push("/");
         })
         .catch((error) => {
           // Handle non-existing user
           if (error.message === "Invalid username or password.") {
             this.showSignupOption = true;
+            this.$router.push("/login"); // Redirect back to the login page
           }
           alert(error.message);
         });
@@ -51,6 +54,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 /* Container for the login form */
 .login-container {
