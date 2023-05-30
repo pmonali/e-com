@@ -1,21 +1,53 @@
-<!-- src/components/Login.vue -->
 <template>
-  <div class="login-container">
-    <h2>Login</h2>
-    <form @submit.prevent="login">
+  <div>
+    <form v-if="!isSignup" @submit.prevent="login">
+      <!-- Login form code -->
+      <h2>Login</h2>
+      <!-- Input fields for email and password -->
       <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" v-model="username" />
+        <label for="email">Email:</label>
+        <input type="email" id="email" v-model="email" required />
       </div>
       <div>
         <label for="password">Password:</label>
-        <input type="password" id="password" v-model="password" />
+        <input type="password" id="password" v-model="password" required />
       </div>
-      <button type="submit">Login</button>
+      <div>
+        <button type="submit">Login</button>
+      </div>
     </form>
-    <p v-if="showSignupOption">
-      Don't have an account? <router-link to="/signup">Signup</router-link>
-    </p>
+
+    <form v-else @submit.prevent="signup">
+      <!-- Signup form code -->
+      <h2>Sign Up</h2>
+      <!-- Input fields for first name, last name, email, and password -->
+      <div>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" v-model="firstName" required />
+      </div>
+      <div>
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" v-model="lastName" required />
+      </div>
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" v-model="email" required />
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" v-model="password" required />
+      </div>
+      <div>
+        <button type="submit">Sign Up</button>
+      </div>
+    </form>
+
+    <div v-if="isSignup">
+      Already have an account? <button @click="toggleSignup">Login</button>
+    </div>
+    <div v-else>
+      Don't have an account? <button @click="toggleSignup">Sign Up</button>
+    </div>
   </div>
 </template>
 
@@ -23,85 +55,51 @@
 export default {
   data() {
     return {
-      username: "",
+      isSignup: false,
+      firstName: "",
+      lastName: "",
+      email: "",
       password: "",
-      showSignupOption: true,
     };
   },
   methods: {
+    toggleSignup() {
+      this.isSignup = !this.isSignup;
+    },
     login() {
-      const credentials = {
-        username: this.username,
+      const users = JSON.parse(localStorage.getItem("users") || "[]");
+      const user = users.find(
+        (u) => u.email === this.email && u.password === this.password
+      );
+      if (user) {
+        alert("Login successful");
+        this.resetForm();
+      } else {
+        alert("Invalid Email or Password");
+      }
+    },
+    signup() {
+      const newUser = {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        email: this.email,
         password: this.password,
       };
 
-      this.$store
-        .dispatch("login", credentials)
-        .then(() => {
-          // Handle successful login
-          // Redirect the user to the desired route
-          this.$router.push("/");
-        })
-        .catch((error) => {
-          // Handle non-existing user
-          if (error.message === "Invalid username or password.") {
-            this.showSignupOption = true;
-            this.$router.push("/login"); // Redirect back to the login page
-          }
-          alert(error.message);
-        });
+      const users = JSON.parse(localStorage.getItem("users") || "[]");
+      users.push(newUser);
+      localStorage.setItem("users", JSON.stringify(users));
+
+      alert("Signup successful");
+      this.resetForm();
+      // Optionally, you can redirect the user or perform any other action
+    },
+    resetForm() {
+      this.firstName = "";
+      this.lastName = "";
+      this.email = "";
+      this.password = "";
     },
   },
 };
 </script>
-
-<style scoped>
-/* Container for the login form */
-.login-container {
-  width: 300px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f2f2f2;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-} /* Heading style */
-.login-container h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
-} /* Text input style */
-.login-container input[type="text"],
-.login-container input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: none;
-  border-radius: 3px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-} /* Button style */
-.login-container button {
-  width: 100%;
-  padding: 10px;
-  background-color: #4caf50;
-  border: none;
-  border-radius: 3px;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-} /* Button hover effect */
-.login-container button:hover {
-  background-color: #45a049;
-} /* Error message style */
-.login-container .error-message {
-  color: #ff0000;
-  margin-bottom: 15px;
-} /* Link style */
-.login-container a {
-  text-decoration: none;
-  color: #4caf50;
-} /* Link hover
-effect */
-.login-container a:hover {
-  text-decoration: underline;
-}
-</style>
