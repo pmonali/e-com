@@ -1,7 +1,11 @@
 <template>
   <div id="app">
-    <TheNavbar />
-    <router-view />
+    <TheNavbar
+      :loggedIn="loggedIn"
+      :userName="userName"
+      @logout="handleLogout"
+    />
+    <router-view @login-success="handleLoginSuccess" />
     <TheFooter />
   </div>
 </template>
@@ -15,6 +19,23 @@ export default {
   components: {
     TheNavbar,
     TheFooter,
+  },
+  data() {
+    return {
+      loggedIn: false,
+      userName: "",
+    };
+  },
+  methods: {
+    handleLoginSuccess(firstName) {
+      this.loggedIn = true;
+      this.userName = firstName;
+    },
+    handleLogout() {
+      this.loggedIn = false;
+      this.userName = "";
+      // alert("logout");
+    },
   },
 };
 </script>

@@ -74,6 +74,7 @@ export default {
       if (user) {
         alert("Login successful");
         this.resetForm();
+        this.$emit("login-success", user.firstName);
       } else {
         alert("Invalid Email or Password");
       }
@@ -92,7 +93,7 @@ export default {
 
       alert("Signup successful");
       this.resetForm();
-      // Optionally, you can redirect the user or perform any other action
+      // Optionally, you can emit an event or perform any other action
     },
     resetForm() {
       this.firstName = "";

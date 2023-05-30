@@ -24,34 +24,16 @@
         <router-link to="/cart" class="navbar-item">Cart</router-link>
       </div>
       <div class="navbar-end">
+        <!-- < class="navbar-end"> -->
         <div class="navbar-item">
-          <div class="buttons">
-            <template v-if="isLoggedIn">
-              <div class="dropdown is-right is-hoverable">
-                <div class="navbar-link is-arrowless">
-                  Hi, {{ username }}
-                  <span class="icon">
-                    <i class="fas fa-chevron-down"></i>
-                  </span>
-                </div>
-                <div class="dropdown-menu">
-                  <div class="dropdown-content">
-                    <router-link to="/account" class="dropdown-item"
-                      >Account Details</router-link
-                    >
-                  </div>
-                </div>
-              </div>
-              <button class="button is-primary" @click="logout">Logout</button>
-            </template>
-            <template v-else>
-              <router-link to="/login" class="button is-primary">
-                <strong>Login</strong>
-              </router-link>
-              <router-link to="/signup" class="button is-light">
-                Sign up
-              </router-link>
-            </template>
+          <div v-if="!loggedIn">
+            <router-link to="/login" class="button is-primary"
+              >Login</router-link
+            >
+          </div>
+          <div v-else>
+            <span>hello, {{ userName }}!</span>
+            <button @click="logout">Logout</button>
           </div>
         </div>
       </div>
@@ -60,31 +42,29 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
   name: "TheNavbar",
+  props: {
+    loggedIn: {
+      type: Boolean,
+      required: true,
+    },
+    userName: {
+      type: String,
+      default: "",
+    },
+  },
   data() {
     return {
       menuActive: false,
     };
-  },
-  computed: {
-    ...mapGetters(["isLoggedIn", "username"]),
   },
   methods: {
     toggleMenu() {
       this.menuActive = !this.menuActive;
     },
     logout() {
-      this.$store
-        .dispatch("logout")
-        .then(() => {
-          this.$router.push("/login");
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      this.$emit("logout");
     },
   },
 };
@@ -160,7 +140,7 @@ export default {
 
 .buttons .button {
   margin-left: 1rem;
-  color: rgb(118, 49, 49);
+  color: black;
   text-decoration: none;
 }
 </style>

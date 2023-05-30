@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import CategoriesView from "../views/CategoriesView.vue";
 import LoginForm from "../components/LoginForm.vue";
-import SignUp from "../components/SignUp.vue";
+
 import ProductView from "../views/ProductView.vue";
 const routes = [
   {
@@ -20,11 +20,11 @@ const routes = [
     name: "login",
     component: LoginForm,
   },
-  {
-    path: "/signup",
-    name: "signup",
-    component: SignUp,
-  },
+  // {
+  //   path: "/signup",
+  //   name: "signup",
+  //   component: SignUp,
+  // },
   // { path: "/category/:id", component: ProductView, props: true },
   {
     path: "/category/:category",
